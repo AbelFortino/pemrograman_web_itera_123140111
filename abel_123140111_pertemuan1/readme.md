@@ -1,6 +1,5 @@
 # StudyFlow - Aplikasi Manajemen Tugas Mahasiswa
 
-## Identitas Pembuat
 **Nama**: Abel Fortino  
 **NIM**: 123140111  
 **Kelas**: RA
@@ -166,4 +165,5 @@ sortTasks(tasks, criteria) {
 ├── index.html          # Main application file
 ├── style.css           # Styling dengan theme system
 └── script.js           # Application logic dan features
+
 ```
