@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyFlow - Manajemen Tugas Mahasiswa</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">🎓 StudyFlow</h1>
+                <p class="tagline">Your Academic Companion</p>
+            </div>
+            <div class="theme-toggle">
+                <button id="themeBtn">🌙 Dark Mode</button>
+            </div>
+        </header>
+
+        <div class="dashboard">
+            <div class="stat-card">
+                <div class="stat-icon">📝</div>
+                <div class="stat-info">
+                    <span class="stat-number" id="totalTasks">0</span>
+                    <span class="stat-label">Total Tugas</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⏳</div>
+                <div class="stat-info">
+                    <span class="stat-number" id="pendingCount">0</span>
+                    <span class="stat-label">Belum Selesai</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">✅</div>
+                <div class="stat-info">
+                    <span class="stat-number" id="completedCount">0</span>
+                    <span class="stat-label">Selesai</span>
+                </div>
+            </div>
+            <div class="stat-card urgent">
+                <div class="stat-icon">🚨</div>
+                <div class="stat-info">
+                    <span class="stat-number" id="urgentCount">0</span>
+                    <span class="stat-label">Deadline Dekat</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <button class="action-btn" onclick="taskManager.showAddForm()">
+                ➕ Tambah Tugas
+            </button>
+            <button class="action-btn secondary" onclick="taskManager.exportData()">
+                📤 Export Data
+            </button>
+            <button class="action-btn secondary" onclick="taskManager.clearCompleted()">
+                🗑️ Hapus yang Selesai
+            </button>
+        </div>
+
+        <div class="form-modal" id="addFormModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>➕ Tambah Tugas Baru</h2>
+                    <button class="close-btn" onclick="taskManager.hideAddForm()">×</button>
+                </div>
+                <form id="taskForm" class="task-form">
+                    <div class="form-group">
+                        <label for="taskName">Nama Tugas *</label>
+                        <input type="text" id="taskName" placeholder="Contoh: Tugas Akhir Basis Data">
+                        <span class="error" id="nameError"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="course">Mata Kuliah *</label>
+                        <input type="text" id="course" placeholder="Contoh: Pemrograman Web">
+                        <span class="error" id="courseError"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="deadline">Deadline *</label>
+                        <input type="datetime-local" id="deadline">
+                        <span class="error" id="deadlineError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="priority">Prioritas</label>
+                        <select id="priority">
+                            <option value="low">🟢 Rendah</option>
+                            <option value="medium">🟡 Sedang</option>
+                            <option value="high">🔴 Tinggi</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Deskripsi (Opsional)</label>
+                        <textarea id="description" placeholder="Tambahkan deskripsi tugas..." rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="taskManager.hideAddForm()">Batal</button>
+                        <button type="submit" class="btn-primary">Simpan Tugas</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Cari tugas, mata kuliah, atau deskripsi...">
+            </div>
+            
+            <div class="filter-group">
+                <select id="statusFilter">
+                    <option value="all">📋 Semua Status</option>
+                    <option value="pending">⏳ Belum Selesai</option>
+                    <option value="completed">✅ Selesai</option>
+                </select>
+
+                <select id="priorityFilter">
+                    <option value="all">🎯 Semua Prioritas</option>
+                    <option value="high">🔴 Tinggi</option>
+                    <option value="medium">🟡 Sedang</option>
+                    <option value="low">🟢 Rendah</option>
+                </select>
+
+                <select id="courseFilter">
+                    <option value="all">📚 Semua Mata Kuliah</option>
+                </select>
+
+                <select id="sortBy">
+                    <option value="deadline">📅 Urutkan by Deadline</option>
+                    <option value="priority">🎯 Urutkan by Prioritas</option>
+                    <option value="created">🆕 Urutkan by Terbaru</option>
+                    <option value="name">🔤 Urutkan by Nama</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="task-list" id="taskList">
+        </div>
+
+        <div class="empty-state" id="emptyState">
+            <div class="empty-icon">📚</div>
+            <h3>Belum ada tugas</h3>
+            <p>Mulai dengan menambahkan tugas pertama Anda!</p>
+            <button class="btn-primary" onclick="taskManager.showAddForm()">➕ Tambah Tugas Pertama</button>
+        </div>
+    </div>
+
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>✏️ Edit Tugas</h2>
+                <button class="close-btn" onclick="taskManager.closeEditModal()">×</button>
+            </div>
+            <form id="editForm">
+                <input type="hidden" id="editTaskId">
+                <div class="form-group">
+                    <label for="editTaskName">Nama Tugas</label>
+                    <input type="text" id="editTaskName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editCourse">Mata Kuliah</label>
+                    <input type="text" id="editCourse" required>
+                </div>
+                <div class="form-group">
+                    <label for="editDeadline">Deadline</label>
+                    <input type="datetime-local" id="editDeadline" required>
+                </div>
+                <div class="form-group">
+                    <label for="editPriority">Prioritas</label>
+                    <select id="editPriority">
+                        <option value="low">🟢 Rendah</option>
+                        <option value="medium">🟡 Sedang</option>
+                        <option value="high">🔴 Tinggi</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editDescription">Deskripsi</label>
+                    <textarea id="editDescription" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="taskManager.closeEditModal()">Batal</button>
+                    <button type="submit" class="btn-primary">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
