@@ -1,5 +1,9 @@
 # Sistem Manajemen Perpustakaan
 
+**Nama**: Abel Fortino  
+**NIM**: 123140111  
+**Kelas**: RA
+
 ## Deskripsi Program
 Program ini adalah sistem manajemen perpustakaan sederhana yang dibangun menggunakan konsep Object-Oriented Programming (OOP) dalam Python. Program dapat mengelola koleksi buku dan majalah dengan fitur peminjaman dan pengembalian.
 
