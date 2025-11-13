@@ -29,15 +29,15 @@ StudyFlow adalah aplikasi web comprehensive untuk manajemen tugas akademik mahas
 ## Screenshot
 
 ### 1. Dashboard dengan Statistik
-![Dashboard](screenshots/dashboard.PNG)
+![Dashboard](screenshots/dashboard.png)
 *Dashboard aplikasi dengan statistical overview*
 
 ### 2. Dark Mode Interface
-![Dark Mode](screenshots/darkmode.PNG)
+![Dark Mode](screenshots/darkmode.png)
 *Tampilan dark mode dengan priority color coding*
 
 ### 3. Advanced Filtering Modal
-![Filter Modal](screenshots/filtering.PNG)
+![Filter Modal](screenshots/filtering.png)
 *Interface filtering dan editing yang advanced*
 
 ## Panduan
